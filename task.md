@@ -10,3 +10,7 @@
     package.json 
 
 # day 2
+- install postman
+- create workspace , and collection
+- make api call 
+
