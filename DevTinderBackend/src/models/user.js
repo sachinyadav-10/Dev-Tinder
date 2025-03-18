@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validators = require('validator');
 
 const UserSchema = new mongoose.Schema({
     firstName : {
@@ -14,10 +15,20 @@ const UserSchema = new mongoose.Schema({
         required:true,
         unique:true,
         trim:true,
+        vaidator(value){
+            if(!validators.isEmail(value)){
+                throw new Error("emial id is not valid");
+            }
+        },
     },
     password:{
         type: String,
         required:true,
+        vaidator(value){
+            if(!validators.isStrongPassword(value)){
+                throw new Error("Passward is week");
+            }
+        },
     },
     age:{
         type:Number,
@@ -33,7 +44,12 @@ const UserSchema = new mongoose.Schema({
     },
     photourl:{
         type:String,
-        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-TruksPXPI5imDL_kfzEfFiAZwg5AzHtWg&s"
+        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-TruksPXPI5imDL_kfzEfFiAZwg5AzHtWg&s",
+        vaidator(value){
+            if(!validators.isURL(value)){
+                throw new Error("Photo url is not valid");
+            }
+        },
     },
     about:{
         type: String,
