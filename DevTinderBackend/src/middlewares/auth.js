@@ -13,7 +13,6 @@ const userAuth = async(req,res,next)=>{
 
     // Verify the token
     const decodedMessage = await jwt.verify(token, "king@Tinder123");
-    console.log(decodedMessage);
 
     // Extract user ID from the decoded token
     const { _id } = decodedMessage;

@@ -3,7 +3,6 @@ const connectDB=require('./config/database.js');
 const app = express();
 const cookieParser = require("cookie-parser");
 const User = require("./models/user.js");
-const { userAuth } = require("./middlewares/auth.js");
 app.use(express.json());
 app.use(cookieParser());
 

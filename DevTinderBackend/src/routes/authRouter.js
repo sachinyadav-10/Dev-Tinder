@@ -3,6 +3,8 @@ const User = require("../models/user.js");
 const bcrypt = require("bcrypt");
 const { validateSignUpData } = require("../validation.js");
 const authRouter = express.Router();
+const cookieParser = require("cookie-parser");
+authRouter.use(cookieParser());
 
 authRouter.get('/',async(req,res)=>{
 
@@ -78,4 +80,8 @@ authRouter.post("/login", async(req,res)=>{
         res.status(400).send("ERROR :" +error.message);
     }
 })
+authRouter.post("/logout",async(req,res)=>{
+    res.cookie("token",null,{expires:new Date(Date.now())})
+    res.send("logout sucessfull.......");
+});
 module.exports = authRouter

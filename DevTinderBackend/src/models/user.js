@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
         type:String,
         lowercase:true,
         required:true,
+        index:true,
         unique:true,
         trim:true,
         vaidator(value){
