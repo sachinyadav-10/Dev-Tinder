@@ -1,9 +1,36 @@
+import axios from 'axios';
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { BASE_URL } from '../utils/constants';
+import { removeUser } from '../utils/userSlice';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+
 
 const NavBar = () => {
     const user = useSelector(store=>store.user);
+    const dispatch=useDispatch();
+    const navigate= useNavigate();
     console.log(user);
+    const handleHomepageClick = () => {
+      if (!user) {
+        alert("Please log in to view the feed.");
+        navigate("/login");
+      } else {
+        navigate("/");
+      }
+    };
+    
+    const handelLogout = async()=>{
+      try {
+        await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+          dispatch(removeUser());
+          return navigate("/login")
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
     
   return (
     <div>
@@ -16,14 +43,14 @@ const NavBar = () => {
                 <ul
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                    <li><a>Homepage</a></li>
+                    <li><a onClick={handleHomepageClick}>Homepage</a></li>
                     <li><a>Portfolio</a></li>
                     <li><a>About</a></li>
                 </ul>
                 </div>
             </div>
             <div className="navbar-center">
-                <a className="btn btn-ghost text-xl">💑Dev-Tinder</a>
+                <a onClick={handleHomepageClick} className="btn btn-ghost text-xl">💑Dev-Tinder</a>
             </div>
             <div className="navbar-end">
                 <button className="btn btn-ghost btn-circle">
@@ -47,12 +74,12 @@ const NavBar = () => {
         tabIndex={0}
         className="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-40 p-2 shadow">
         <li>
-          <a className="justify-between">
+          <Link to="/profile" className="justify-between">
             Profile
-          </a>
+          </Link>
         </li>
         <li><a>Settings</a></li>
-        <li><a>Logout</a></li>
+        <li><a onClick={handelLogout}>Logout</a></li>
       </ul>
     </div>)}
             </div>

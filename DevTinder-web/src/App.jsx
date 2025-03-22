@@ -5,6 +5,7 @@ import Feed from "./components/Feed.jsx"
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import appStore from "./utils/appStore.js"
 import { Provider } from 'react-redux';
+import Profile from "./components/Profile.jsx";
 function App() {
 
   return (
@@ -12,10 +13,11 @@ function App() {
     <Provider store={appStore}>
       <BrowserRouter basename="/">
         <Routes>
-          <Route path="/" element={<Feed/>}>
-            <Route path="/" element={<Login/>}/>
+          <Route path="/" element={<Body/>}>
+            <Route path="/" element={<Feed/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<SignUp/>}/>
+            <Route path="/profile" element={<Profile/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
