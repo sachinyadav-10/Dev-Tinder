@@ -11,7 +11,6 @@ const NavBar = () => {
     const user = useSelector(store=>store.user);
     const dispatch=useDispatch();
     const navigate= useNavigate();
-    console.log(user);
     const handleHomepageClick = () => {
       if (!user) {
         alert("Please log in to view the feed.");
