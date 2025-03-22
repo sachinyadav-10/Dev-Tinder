@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import Card from './Card';
 
-const EditProfile = ({ user: { firstName: initialFirstName, lastName: initialLastName, age: initialAge, about: initialAbout, gender: initialGender, photoUrl: initialPhotoUrl } }) => {
-    const [firstName, setFirstName] = useState(initialFirstName);
-    const [lastName, setLastName] = useState(initialLastName);
-    const [age, setAge] = useState(initialAge || "");
-    const [about, setAbout] = useState(initialAbout || "");
-    const [gender, setGender] = useState(initialGender || "");
-    const [photourl, setPhotoUrl] = useState(initialPhotoUrl || "");
-    const handleSave = async () => {
-        console.log();
-      };
+const EditProfile = ({ user }) => {
+  const [firstName, setFirstName] = useState(user?.firstName || '');
+  const [lastName, setLastName] = useState(user?.lastName || '');
+  const [age, setAge] = useState(user?.age || '');
+  const [about, setAbout] = useState(user?.about || '');
+  const [gender, setGender] = useState(user?.gender || '');
+  const [photourl, setPhotoUrl] = useState(user?.photoUrl || '');
+
+  const handleSave = async () => {
+    console.log();
+  };
 
   return (
     <div className='flex justify-center items-start gap-10 m-10'>
@@ -96,6 +97,5 @@ const EditProfile = ({ user: { firstName: initialFirstName, lastName: initialLas
     </div>
   );
 };
-  
 
-export default EditProfile
+export default EditProfile;
