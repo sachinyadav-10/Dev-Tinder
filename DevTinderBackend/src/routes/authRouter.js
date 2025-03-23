@@ -35,9 +35,12 @@ authRouter.post("/signup", async (req, res) => {
         });
 
         // Save the user to the database
-        await user.save();
-
-        // Send success response (exclude sensitive data like password hash)
+        const savedUser=await user.save();
+        const token = await user.getJWT();
+        res.cookie("token",token,{httpOnly:true,
+            expires: new Date(Date.now() + 1000 * 60 * 60*7 ),
+        });
+        
         res.status(201).json({
             message: "User added successfully",
             user: {

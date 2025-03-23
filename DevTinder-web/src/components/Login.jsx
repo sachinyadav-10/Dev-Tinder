@@ -5,20 +5,38 @@ import { addUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
 import {BASE_URL} from "../utils/constants"
 const Login = () => {
-  const [emailId,setEmailId]=useState("ankit@gmail.com");
-  const [password,setPassword]=useState("Ankit@123");
+  const [emailId,setEmailId]=useState("muskan@gmail.com");
+  const [password,setPassword]=useState("Muskan@123");
+  const [firstName,setfirstName]=useState("");
+  const [lastName,setlastName]=useState("");
+  const [isLogin,setIsLogin]=useState(true);
   const dispatch = useDispatch();
   const navigate= useNavigate();
 
+  const handelSignUp = async () => {
+    try {
+      const response = await axios.post(BASE_URL+"/signup", {
+        firstName,
+        lastName,
+        emailId,
+        password,
+      },{withCredentials:true});
+      dispatch(addUser(response.data.data));
+      return navigate("/")
+    } catch (error) {
+      console.error("Signup failed:", error);
+      throw error;
+    }
+
+  };
   const handleLogin = async () => {
     try {
       const response = await axios.post(BASE_URL+"/login", {
         emailId,
         password
       },{withCredentials:true});
-      console.log("Login successful:", response.data);
       dispatch(addUser(response.data));
-      return navigate("/")
+      return navigate("/profile")
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -30,8 +48,35 @@ const Login = () => {
       <div className="card w-96 bg-base-300 shadow-sm">
         <div className="card-body">
           <div className="flex justify-between">
-            <h2 className="text-3xl font-bold">Login</h2>
+            <h2 className="text-3xl font-bold">{isLogin? "Login" : "SignUp"}</h2>
           </div>
+          {isLogin&&(
+          <>
+           <label className="floating-label mt-2">
+              <span>First Name</span>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setfirstName(e.target.value)}
+                placeholder="First Name"
+                className="input input-md w-full"
+                required
+              />
+            </label>
+
+            <label className="floating-label mt-2">
+              <span>Last Name</span>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setlastName(e.target.value)}
+                placeholder="Last Name"
+                className="input input-md w-full"
+                required
+              />
+            </label>
+            </>
+            )}
           <label className="input validator mt-4">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></g></svg>
             <input type="email" value={emailId} onChange={(e)=>setEmailId(e.target.value)} placeholder="Enter your Email" required/>
@@ -48,8 +93,9 @@ const Login = () => {
             <br/>At least one uppercase letter
           </p>
           <div className="mt-6">
-            <button className="btn btn-primary btn-block" onClick={handleLogin}>Login</button>
+            <button className="btn btn-primary btn-block" onClick={isLogin?handelSignUp:handleLogin}>{isLogin? "SignUp":"Login"}</button>
           </div>
+          <p className='m-auto py-2 cursor-pointer text-md' onClick={()=>{setIsLogin((value)=>!value)}}>{isLogin ? "Existing User? Login here":"New User? SignUp here"}</p>
         </div>
       </div>
     </div>

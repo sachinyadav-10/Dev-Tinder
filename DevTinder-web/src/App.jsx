@@ -6,6 +6,8 @@ import {BrowserRouter,Routes,Route} from "react-router-dom"
 import appStore from "./utils/appStore.js"
 import { Provider } from 'react-redux';
 import Profile from "./components/Profile.jsx";
+import Connections from "./components/Connections.jsx";
+import Requests from "./components/Requests.jsx";
 function App() {
 
   return (
@@ -18,6 +20,8 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/connections" element={<Connections/>}/>
+            <Route path="/requests" element={<Requests/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
