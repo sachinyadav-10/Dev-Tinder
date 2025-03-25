@@ -9,17 +9,16 @@ const Requests = () => {
     const requests = useSelector((store) => store.requests);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    // Fetch connection requests from the server
     const fetchRequests = async () => {
         try {
             const res = await axios.get(BASE_URL + "/user/requests", { withCredentials: true });
-            dispatch(addRequests(res.data.connectionRequest)); // Update Redux store with requests
-            setError(null); // Clear any previous errors
+            dispatch(addRequests(res.data.connectionRequest)); 
+            setError(null); 
         } catch (error) {
             console.error('Error fetching requests:', error);
-            setError('Failed to fetch requests. Please try again.'); // Set error message
+            setError('Failed to fetch requests. Please try again.'); 
         } finally {
-            setIsLoading(false); // Hide loading state
+            setIsLoading(false);
         }
     };
     const handelRequest = async (status,_id) => {
@@ -31,22 +30,18 @@ const Requests = () => {
             
         }
     }
-    // Fetch requests when the component mounts
     useEffect(() => {
         fetchRequests();
     }, []);
 
-    // Show a loading message while fetching data
     if (isLoading) {
         return <h1 className='text-4xl font-bold text-center my-18'>Loading...</h1>;
     }
 
-    // Show an error message if the request fails
     if (error) {
         return <h1 className='text-4xl font-bold text-center my-18'>{error}</h1>;
     }
 
-    // Show a message if there are no requests
     if (!requests || requests.length === 0) {
         return <h1 className='text-4xl font-bold text-center my-18'>No requests found</h1>;
     }
@@ -71,7 +66,7 @@ const Requests = () => {
                         </div>
                         <div className='mx-12 flex'>
                             <button className="btn mx-4 bg-blue-600 btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-md" onClick={()=>handelRequest("accept",request._id)}>Accept</button>
-                            <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-md"onClick={()=>handelRequest("reject",request._id)}>Reject</button>
+                            <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-md"onClick={()=>handelRequest("rejected",request._id)}>Reject</button>
                         </div>
                     </div>
                 ))}

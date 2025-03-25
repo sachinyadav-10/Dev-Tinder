@@ -59,7 +59,7 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async (req, r
         const loggedInUser = req.user;
         const { status, requestId } = req.params;
 
-        const allowedStatus = ["accept", "reject"];
+        const allowedStatus = ["accept", "rejected"];
 
         if (!allowedStatus.includes(status)) {
             return res.status(400).json({ error: `Invalid status: ${status}` });

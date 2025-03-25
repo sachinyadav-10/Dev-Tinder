@@ -46,7 +46,7 @@ const Feed = () => {
   }
 
   return (
-    <div className='flex justify-center flex-wrap my-16 gap-4'>
+    <div className='flex justify-center h-full flex-wrap my-16 gap-4'>
       
         <Card user={feed[0]} />
     </div>

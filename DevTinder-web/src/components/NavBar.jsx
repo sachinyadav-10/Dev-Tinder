@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 
 const NavBar = () => {
     const user = useSelector(store=>store.user);
+    console.log(user);
+    
     const dispatch=useDispatch();
     const navigate= useNavigate();
     const handleHomepageClick = () => {
@@ -43,7 +45,6 @@ const NavBar = () => {
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                     <li><a onClick={handleHomepageClick}>Homepage</a></li>
-                    <li><a>Portfolio</a></li>
                     <li><a>About</a></li>
                 </ul>
                 </div>

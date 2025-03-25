@@ -23,12 +23,10 @@ const Connections = () => {
         fetchConnections();
     }, []);
 
-    // Show a loading message while fetching data
     if (!connections) {
         return <h1 className='text-4xl font-bold text-center my-18'>Loading...</h1>;
     }
 
-    // Show a message if there are no connections
     if (connections.length === 0) {
         return <h1 className='text-4xl font-bold text-center my-18'>No connections found</h1>;
     }
@@ -40,7 +38,7 @@ const Connections = () => {
                 {connections.map((connection) => (
                     <div key={connection._id} className='flex items-center p-4 border-b border-gray-200'>
                         <img
-                            src={connection.fromUserId.photoUrl || 'https://via.placeholder.com/150'} // Fallback image if photoUrl is missing
+                            src={connection.fromUserId.photoUrl || 'https://via.placeholder.com/150'}
                             alt={connection.fromUserId.firstName}
                             className='w-12 h-12 rounded-full mr-4'
                         />

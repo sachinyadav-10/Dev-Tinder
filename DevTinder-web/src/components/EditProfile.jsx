@@ -7,80 +7,72 @@ import Card from './Card';
 
 const EditProfile = ({ user }) => {
   // State for form fields
-  const [firstName, setFirstName] = useState(user?.firstName || '');
-  const [lastName, setLastName] = useState(user?.lastName || '');
-  const [age, setAge] = useState(user?.age || '');
-  const [about, setAbout] = useState(user?.about || '');
-  const [gender, setGender] = useState(user?.gender || '');
-  const [photoUrl, setphotoUrl] = useState(user?.photoUrl || '');
-  const [showTost, setshowTost] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    age: user?.age || '',
+    about: user?.about || '',
+    gender: user?.gender || '',
+    photoUrl: user?.photoUrl || ''
+  });
 
-  // State for error and loading
+  // State for error and success
   const [err, setErr] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
 
-  // Update local state when the `user` prop changes
+  // Update local state when the user prop changes
   useEffect(() => {
-    setFirstName(user?.firstName || '');
-    setLastName(user?.lastName || '');
-    setAge(user?.age || '');
-    setAbout(user?.about || '');
-    setGender(user?.gender || '');
-    setphotoUrl(user?.photoUrl || '');
+    setFormData({
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      age: user?.age || '',
+      about: user?.about || '',
+      gender: user?.gender || '',
+      photoUrl: user?.photoUrl || ''
+    });
   }, [user]);
 
-  // Handle save button click
-  const handleSave = async () => {
-    setErr(''); // Clear previous errors
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-    // Validate required fields
-    if (!firstName || !lastName) {
+  const handleSave = async () => {
+    setErr(''); 
+  
+    if (!formData.firstName || !formData.lastName) {
       setErr('First Name and Last Name are required.');
       return;
     }
 
-    setIsLoading(true); // Show loading state
-
     try {
-      // Prepare payload with valid values
-      const payload = {
-        firstName,
-        lastName,
-        age: age || null, // Use null if age is blank
-        gender: gender || '', // Use empty string if gender is blank
-        about: about || '', // Use empty string if about is blank
-        photoUrl: photoUrl || '', // Use empty string if photoUrl is blank
-      };
+      const res = await axios.patch(
+        `${BASE_URL}/profile/edit`, 
+        formData,
+        { withCredentials: true }
+      );
 
-
-      const res = await axios.patch(`${BASE_URL}/profile/edit`, payload, {
-        withCredentials: true,
-      });
-
-
-      // Update Redux store with new user data
-      if (res.data && res.data.data) {
-        dispatch(addUser(res.data.data)); // Update Redux store
-        setshowTost(true); // Show toast notification
-        setTimeout(() => {
-          setshowTost(false); // Hide toast after 3 seconds
-        }, 3000);
-      } else {
-        setErr('Invalid response from server.');
-      }
+      // Update Redux store with the new user data
+      dispatch(addUser(res.data.data));
+      
+      // Show success toast
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+      
     } catch (error) {
       setErr(error.response?.data?.message || error.message || 'An error occurred.');
-    } finally {
-      setIsLoading(false); // Hide loading state
     }
   };
 
   return (
     <div className='flex flex-col items-center'>
       {/* Toast Notification */}
-      {showTost && (
+      {showToast && (
         <div className="toast toast-top toast-center">
           <div className="alert alert-success">
             <span>Profile saved successfully.</span>
@@ -94,89 +86,34 @@ const EditProfile = ({ user }) => {
           <div className="card-body">
             <h2 className="text-3xl font-bold mb-2">Edit Profile</h2>
 
-            {/* Display error message */}
             {err && <div className="text-red-500 mb-4">{err}</div>}
 
-            <label className="floating-label mt-2">
-              <span>First Name</span>
-              <input
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First Name"
-                className="input input-md w-full"
-                required
-              />
-            </label>
-
-            <label className="floating-label mt-2">
-              <span>Last Name</span>
-              <input
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Last Name"
-                className="input input-md w-full"
-                required
-              />
-            </label>
-
-            <label className="floating-label mt-2">
-              <span>Age</span>
-              <input
-                type="text"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                placeholder="Age"
-                className="input input-md w-full"
-              />
-            </label>
-
-            <label className="floating-label mt-2">
-              <span>About</span>
-              <input
-                type="text"
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-                placeholder="About"
-                className="input input-md w-full"
-              />
-            </label>
-
-            <label className="floating-label mt-2">
-              <span>Gender</span>
-              <input
-                type="text"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                placeholder="Gender"
-                className="input input-md w-full"
-              />
-            </label>
-
-            <label className="floating-label mt-2">
-              <span>Photo Url</span>
-              <input
-                type="text"
-                value={photoUrl}
-                onChange={(e) => setphotoUrl(e.target.value)}
-                placeholder="Photo Url"
-                className="input input-md w-full"
-              />
-            </label>
+            {Object.entries(formData).map(([key, value]) => (
+              <label key={key} className="floating-label mt-2">
+                <span>{key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</span>
+                <input
+                  type="text"
+                  name={key}
+                  value={value}
+                  onChange={handleChange}
+                  placeholder={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                  className="input input-md w-full"
+                  required={key === 'firstName' || key === 'lastName'}
+                />
+              </label>
+            ))}
 
             <button
               className="btn btn-primary btn-block mt-6"
               onClick={handleSave}
-              disabled={isLoading} // Disable button while loading
             >
-              {isLoading ? 'Saving...' : 'Save'}
+              Save Changes
             </button>
           </div>
         </div>
 
         {/* Live Preview Card */}
-        <Card user={{ firstName, lastName, about, gender, age, photoUrl }} />
+        <Card user={formData} />
       </div>
     </div>
   );

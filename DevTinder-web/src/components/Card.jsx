@@ -13,12 +13,12 @@ const Card = ({ user }) => {
     try {
       const res = await axios.post(
         BASE_URL + "/request/send/" + status + "/" + _id,
-        {}, // Empty payload (if no data is required)
-        { withCredentials: true } // Include credentials
+        {}, 
+        { withCredentials: true }
       );
-      dispatch(removeFeed(_id)); // Remove the user from the feed
+      dispatch(removeFeed(_id));
     } catch (error) {
-      console.error('Error handling request:', error); // Debugging: Log the error
+      console.error('Error handling request:', error);
     }
   };
 
@@ -26,7 +26,7 @@ const Card = ({ user }) => {
     <div className="card bg-neutral shadow-sm text-neutral-content w-64">
       <figure className='h-72 overflow-hidden bg-gray-300'>
         <img
-          src={photoUrl || 'https://via.placeholder.com/150'} // Fallback image if photoUrl is missing
+          src={photoUrl || 'https://via.placeholder.com/150'}
           alt={firstName}
           className="w-full h-full object-cover"
         />
@@ -38,13 +38,13 @@ const Card = ({ user }) => {
         <div className="card-actions justify-end">
           <button
             className="btn btn-primary"
-            onClick={() => handelSendRequest("intrested", _id)} // Correct onClick handler
+            onClick={() => handelSendRequest("intrested", _id)}
           >
             Interested
           </button>
           <button
             className="btn btn-ghost"
-            onClick={() => handelSendRequest("ignore", _id)} // Correct onClick handler
+            onClick={() => handelSendRequest("ignore", _id)} 
           >
             Ignore
           </button>

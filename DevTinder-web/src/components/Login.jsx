@@ -4,14 +4,15 @@ import {useDispatch} from 'react-redux'
 import { addUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
 import {BASE_URL} from "../utils/constants"
+
 const Login = () => {
-  const [emailId,setEmailId]=useState("muskan@gmail.com");
-  const [password,setPassword]=useState("Muskan@123");
-  const [firstName,setfirstName]=useState("");
-  const [lastName,setlastName]=useState("");
-  const [isLogin,setIsLogin]=useState(true);
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
   const dispatch = useDispatch();
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const handelSignUp = async () => {
     try {
@@ -20,23 +21,23 @@ const Login = () => {
         lastName,
         emailId,
         password,
-      },{withCredentials:true});
+      }, {withCredentials: true});
       dispatch(addUser(response.data.data));
       return navigate("/")
     } catch (error) {
       console.error("Signup failed:", error);
       throw error;
     }
-
   };
+
   const handleLogin = async () => {
     try {
       const response = await axios.post(BASE_URL+"/login", {
         emailId,
         password
-      },{withCredentials:true});
+      }, {withCredentials: true});
       dispatch(addUser(response.data));
-      return navigate("/profile")
+      return navigate("/")
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -44,58 +45,100 @@ const Login = () => {
   };
 
   return (
-    <div className='flex justify-center mt-[3%]'>
-      <div className="card w-96 bg-base-300 shadow-sm">
-        <div className="card-body">
-          <div className="flex justify-between">
-            <h2 className="text-3xl font-bold">{isLogin? "Login" : "SignUp"}</h2>
-          </div>
-          {isLogin&&(
-          <>
-           <label className="floating-label mt-2">
-              <span>First Name</span>
-              <input
-                type="text"
-                value={firstName}
-                onChange={(e) => setfirstName(e.target.value)}
-                placeholder="First Name"
-                className="input input-md w-full"
-                required
-              />
-            </label>
+    <div className='relative h-screen bg-gradient-to-b from-black to-gray-600'>
+      {/* Background image with overlay */}
+      <div className='absolute inset-0 bg-[url(https://tinder.com/static/build/8ad4e4299ef5e377d2ef00ba5c94c44c.webp)] bg-cover bg-center opacity-40'></div>
 
-            <label className="floating-label mt-2">
-              <span>Last Name</span>
-              <input
-                type="text"
-                value={lastName}
-                onChange={(e) => setlastName(e.target.value)}
-                placeholder="Last Name"
-                className="input input-md w-full"
-                required
-              />
-            </label>
-            </>
-            )}
-          <label className="input validator mt-4">
-            <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></g></svg>
-            <input type="email" value={emailId} onChange={(e)=>setEmailId(e.target.value)} placeholder="Enter your Email" required/>
-          </label>
-          <div className="validator-hint hidden">Enter valid email address</div>
-          <label className="input validator mt-3">
-            <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></g></svg>
-            <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required placeholder="Password" minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must be more than 8 characters, including number, lowercase letter, uppercase letter" />
-          </label>
-          <p className="validator-hint hidden">
-            Must be more than 8 characters, including
-            <br/>At least one number
-            <br/>At least one lowercase letter
-            <br/>At least one uppercase letter
-          </p>
-          <div className="mt-6">
-            <button className="btn btn-primary btn-block" onClick={isLogin?handelSignUp:handleLogin}>{isLogin? "SignUp":"Login"}</button>
+      {/* Login Card */}
+      <div className='relative z-10 flex justify-center items-center min-h-[calc(100vh-200px)]'>
+        <div className="w-full max-w-md px-10 py-8 mt-10">
+          <div className="bg-base-100 rounded-lg shadow-lg overflow-hidden">
+            <div className="p-8">
+              <h2 className="text-3xl font-bold text-center text-white mb-8">
+                {isLogin ? "Login" : "Sign Up"}
+              </h2>
+              
+              {!isLogin && (
+                <>
+                  <div className="mb-4">
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setfirstName(e.target.value)}
+                      placeholder="First Name"
+                      className="w-full px-4 text-white py-3 border-b border-gray-400 focus:outline-none "
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setlastName(e.target.value)}
+                      placeholder="Last Name"
+                      className="w-full px-4 py-3 text-white border-b border-gray-400 focus:outline-none "
+                      required
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="mb-4">
+                <input 
+                  type="email" 
+                  value={emailId} 
+                  onChange={(e) => setEmailId(e.target.value)} 
+                  placeholder="Email" 
+                  className="w-full  px-4 py-3 text-white border-b border-gray-400 focus:outline-none "
+                  required
+                />
+              </div>
+
+              <div className="mb-6">
+                <input 
+                  type="password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  placeholder="Password" 
+                  className="w-full px-4 py-3 text-white border-b border-gray-400 focus:outline-none "
+                  required
+                  minLength="8"
+                />
+              </div>
+
+              <button 
+                className="w-full bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 rounded-full font-bold hover:opacity-90 transition-all duration-200 mb-4 active:scale-95 active:opacity-80"
+                onClick={isLogin ? handleLogin : handelSignUp}
+              >
+                {isLogin ? "LOG IN" : "SIGN UP"}
+              </button>
+
+              <p className="text-center text-gray-600 text-sm">
+                {isLogin ? (
+                  <>
+                    Don't have an account?{' '}
+                    <span 
+                      className="text-pink-500 font-semibold cursor-pointer"
+                      onClick={() => setIsLogin(false)}
+                    >
+                      Sign up
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?{' '}
+                    <span 
+                      className="text-pink-500 font-semibold cursor-pointer"
+                      onClick={() => setIsLogin(true)}
+                    >
+                      Log in
+                    </span>
+                  </>
+                )}
+              </p>
+            </div>
           </div>
-          <p className='m-auto py-2 cursor-pointer text-md' onClick={()=>{setIsLogin((value)=>!value)}}>{isLogin ? "Existing User? Login here":"New User? SignUp here"}</p>
         </div>
       </div>
     </div>
